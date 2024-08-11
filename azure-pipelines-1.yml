@@ -1,0 +1,20 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscription: 'YOUR-AZURE-SUBSCRIPTION-SERVICE-CONNECTION-NAME'
+  resourceGroupName: 'my-resource-group'
+  location: 'eastus'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Create the resource group
+      az group create --name $(resourceGroupName) --location $(location)
