@@ -1,0 +1,18 @@
+trigger: none
+
+pool: Default
+
+stages:
+  - stage: Buildstage
+    displayName: Build Stage
+    jobs:
+      - job: BuildJob
+        steps:
+        - task: Npm@1
+          inputs:
+            command: 'install'
+            workingDir: '$(System.DefaultWorkingDirectory)'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'ls'
