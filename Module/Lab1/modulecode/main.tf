@@ -1,4 +1,8 @@
-resource "azurerm_resource_group" "rgblock" {
-  name     = "rg-prod001"
-  location = "eastus"
+# module "rg_module" {
+#   source = "../resourcegroup"
+# }
+
+module "sa_module" {
+  depends_on = [ module.rg_module ]
+  source = "../storageaccount"
 }
