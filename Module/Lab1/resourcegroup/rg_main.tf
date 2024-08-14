@@ -1,11 +1,4 @@
-variable "rg_variable" {
-  default = {
-    rg1 = {
-      name     = "rg-module"
-      location = "canadacentral"
-    }
-  }
-}
+variable "rg_variable" {}
 resource "azurerm_resource_group" "rgblock" {
   for_each = var.rg_variable
   name     = each.value.name

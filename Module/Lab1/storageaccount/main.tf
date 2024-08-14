@@ -1,17 +1,7 @@
-variable "sa_variable" {
-  default = {
-    sa1 = {
-      name                     = "samodule"
-      resource_group_name      = "rg-module"
-      location                 = "centralindia"
-      account_tier             = "Standard"
-      account_replication_type = "LRS"
-    }
-  }
-}
+variable "sa_variable" {}
 
-resource "azurerm_storage_account" "storageblock" {
-  for_each = var.sa_variable
+resource "azurerm_storage_account" "accountblock" {
+  for_each                 = var.sa_variable
   name                     = each.value.name
   resource_group_name      = each.value.resource_group_name
   location                 = each.value.location
