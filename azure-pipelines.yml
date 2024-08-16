@@ -13,3 +13,14 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+- stage: Terraformvalidate
+  jobs:
+  - job: Terraforminit
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+
+
