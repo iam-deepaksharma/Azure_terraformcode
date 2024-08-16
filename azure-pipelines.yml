@@ -1,7 +1,6 @@
 trigger: none
 
-pool:
-  vmImage: ubuntu-latest
+pool: Default
 
 stages:
 - stage: Terraforminit
@@ -15,7 +14,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
 - stage: Terraformvalidate
   jobs:
-  - job: Terraforminit
+  - job: Terraformvalidate
     steps:
     - task: TerraformTaskV4@4
       inputs:
