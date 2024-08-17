@@ -13,15 +13,15 @@ provider "azurerm" {
   }
 }
 
-resource "azurerm_resource_group" "block21" {
-  name     = "rain"
+resource "azurerm_resource_group" "block1" {
+  name     = "rg-pipeline"
   location = "centralindia"
 }
 
-resource "azurerm_storage_account" "block22" {
-  name                     = "storageaccountname21"
-  resource_group_name      = "rain"
-  location                 = "southindia"
-  account_tier        = "Standard"
+resource "azurerm_storage_account" "block2" {
+  name                     = "storagecontainerlab"
+  resource_group_name      = "rg-pipeline"
+  location                 = "centralindia"
+  account_tier             = "Standard"
   account_replication_type = "LRS"
 }

@@ -1,57 +1,50 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.114.0"
-    }
-  }
+resource "azurerm_resource_group" "block1" {
+  name     = "idc-prod"
+  location = "centralindia"
 }
 
-provider "azurerm" {
-  features {
-
-  }
-}
-resource "azurerm_resource_group" "resourcegroupblock" {
-  name     = "resourcegroup-production"
-  location = "eastus"
+resource "azurerm_virtual_network" "block2" {
+  name                = "idc-vnet"
+  address_space       = ["10.0.0.0/24"]
+  resource_group_name = azurerm_resource_group.block1.name
+  location            = azurerm_resource_group.block1.location
 }
 
-resource "azurerm_virtual_network" "vnetblock" {
-  name                = "vnet-production"
-  resource_group_name = "resourcegroup-production"
-  address_space       = ["10.1.0.0/24"]
-  location            = "eastus"
+resource "azurerm_subnet" "block3" {
+  name                 = "idc-subnet"
+  resource_group_name  = azurerm_resource_group.block1.name
+  address_prefixes     = ["10.0.0.0/26"]
+  virtual_network_name = azurerm_virtual_network.block2.name
 }
 
-resource "azurerm_subnet" "subnetblock" {
-  name                 = "subnet-production"
-  address_prefixes     = ["10.1.0.0/26"]
-  resource_group_name  = "resourcegroup-production"
-  virtual_network_name = "vnet-production"
+resource "azurerm_public_ip" "block6" {
+  name = "idc-pip"
+  resource_group_name = azurerm_resource_group.block1.name
+  location = azurerm_resource_group.block1.location
+  allocation_method = "Dynamic"
 }
 
-resource "azurerm_network_interface" "nicblock" {
-  name                = "nic-production"
-  resource_group_name = "resourcegroup-production"
-  location            = "eastus"
+resource "azurerm_network_interface" "block4" {
+  name                = "idc-nic"
+  resource_group_name = azurerm_resource_group.block1.name
+  location            = azurerm_resource_group.block1.location
 
   ip_configuration {
     name                          = "Internal"
-    subnet_id                     = azurerm_subnet.subnetblock.id
+    subnet_id                     = azurerm_subnet.block3.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vmblock" {
-  name                  = "linuxvm-production"
-  resource_group_name   = "resourcegroup-production"
-  location              = "centralindia"
+resource "azurerm_linux_virtual_machine" "block5" {
+  name                  = "idc-linux"
+  resource_group_name   = azurerm_resource_group.block1.name
+  location              = azurerm_resource_group.block1.location
   size                  = "Standard_F2"
-  network_interface_ids = [azurerm_network_interface.nicblock.id]
   admin_username        = "azureuser"
   admin_password        = "Tulsaking@123"
   disable_password_authentication = false
+  network_interface_ids = [azurerm_network_interface.block4.id ]
 
   os_disk {
     caching              = "ReadWrite"
@@ -60,9 +53,8 @@ resource "azurerm_linux_virtual_machine" "vmblock" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy" 
+    offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts"
-    version   = "latest"
-    
+    version   = "Latest"
   }
 }
