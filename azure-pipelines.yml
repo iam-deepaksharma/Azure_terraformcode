@@ -1,0 +1,25 @@
+trigger: none
+
+pool: Default
+
+stages:
+- stage: Terraforminit
+  jobs:
+  - job: Terraforminit
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+- stage: Terraformvalidate
+  jobs:
+  - job: Terraformvalidate
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+
+
