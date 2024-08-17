@@ -1,0 +1,41 @@
+trigger: none
+
+pool: Default
+
+variables:
+  # Define Terraform variables here if necessary
+  TF_WORKING_DIR: './terraform'
+  TF_VAR_ENVIRONMENT: 'dev'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    curl -sSL https://install.python-poetry.org | python3 -
+    echo "##vso[task.setvariable variable=PATH]${HOME}/.poetry/bin:${PATH}"
+  displayName: 'Install Poetry'
+
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: '1.x'
+
+- script: |
+    terraform init -input=false
+  displayName: 'Terraform Init'
+
+- script: |
+    terraform validate
+  displayName: 'Terraform Validate'
+
+- script: |
+    terraform plan -out=tfplan -input=false
+  displayName: 'Terraform Plan'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(TF_WORKING_DIR)/tfplan'
+    ArtifactName: 'tfplan'
+    publishLocation: 'Container'
