@@ -11,6 +11,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)Networking/Lab2'
         backendServiceArm: 'connection2'
         backendAzureRmResourceGroupName: 'rg-lab'
         backendAzureRmStorageAccountName: 'duedatelab'
