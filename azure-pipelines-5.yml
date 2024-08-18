@@ -3,16 +3,16 @@ trigger: none
 pool: Default
 
 stages:
-- stage: Terraform
+- stage: TerraformInit
   jobs:
   - job: Terraform
     steps:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-- stage: Terraforminit
-  jobs:
-  - job: Terraforminit
+
+  - job: TerraformInit
+    dependsOn: Terraform
     steps:
     - task: TerraformTaskV4@4
       inputs:
@@ -24,9 +24,11 @@ stages:
         backendAzureRmStorageAccountName: 'duedatelab'
         backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'terraform.tfstate'
-- stage: Terraformplan
+
+- stage: TerraformPlan
+  dependsOn: TerraformInit
   jobs:
-  - job: Terraformplan
+  - job: TerraformPlan
     steps:
     - task: TerraformTaskV4@4
       inputs:
