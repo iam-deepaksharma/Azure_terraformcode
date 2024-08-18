@@ -24,6 +24,13 @@ stages:
         backendAzureRmStorageAccountName: 'duedatelab'
         backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'terraform.tfstate'
+- stage: terraform2
+  jobs:
+  - job: terraform2
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
 - stage: terraformplan
   jobs:
   - job: terraformplan
@@ -34,6 +41,13 @@ stages:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
         environmentServiceNameAzureRM: 'sc-pipeline'
+- stage: terraform3
+  jobs:
+  - job: terraform3
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
 - stage: terraformapply
   jobs:
   - job: terraformapply
