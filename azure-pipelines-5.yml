@@ -1,0 +1,29 @@
+trigger: none
+
+pool: Default
+
+stages:
+- stage: Terraforminit
+  jobs:
+  - job: Terraforminit
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)Networking/Lab2'
+        backendServiceArm: 'connection2'
+        backendAzureRmResourceGroupName: 'rg-lab'
+        backendAzureRmStorageAccountName: 'duedatelab'
+        backendAzureRmContainerName: 'pipelinetfstate'
+        backendAzureRmKey: 'terraform.tfstate'
+- stage: Terraformplan
+  jobs:
+  - job: Terraformplan
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)Networking/Lab2'
+        environmentServiceNameAzureRM: 'connection2'
