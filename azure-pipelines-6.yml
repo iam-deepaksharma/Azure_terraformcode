@@ -27,6 +27,7 @@ stages:
   jobs:
   - job: TerraformValidate
     steps:
+    - script: rm -rf .terraform
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
