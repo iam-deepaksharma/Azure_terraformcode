@@ -2,6 +2,9 @@ trigger: none
 
 pool: Default
 
+variables:
+  system.debug: true
+
 stages:
 - stage: TerraformInit
   jobs:
