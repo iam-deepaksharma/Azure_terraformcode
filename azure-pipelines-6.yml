@@ -51,3 +51,16 @@ stages:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)Networking/Lab2'
         environmentServiceNameAzureRM: 'connection2'
+- stage: TerraformApply
+  jobs:
+  - job: TerraformApply
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)Networking/Lab2'
+        environmentServiceNameAzureRM: 'connection2'
