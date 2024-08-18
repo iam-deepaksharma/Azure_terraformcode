@@ -3,6 +3,13 @@ trigger: none
 pool: Default
 
 stages:
+- stage: Terraform
+  jobs:
+  - job: Terraform
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
 - stage: Terraforminit
   jobs:
   - job: Terraforminit
