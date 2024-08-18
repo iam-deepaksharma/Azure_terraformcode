@@ -18,11 +18,11 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
-        backendServiceArm: 'sc-pipeline'
-        backendAzureRmResourceGroupName: 'rg-pipeline'
-        backendAzureRmStorageAccountName: 'storagecontainerlab'
-        backendAzureRmContainerName: 'pipeline-container'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
+        backendServiceArm: 'connection2'
+        backendAzureRmResourceGroupName: 'rg-lab'
+        backendAzureRmStorageAccountName: 'duedatelab'
+        backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'terraform.tfstate'
 - stage: terraformplan
   jobs:
@@ -32,7 +32,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
         environmentServiceNameAzureRM: 'sc-pipeline'
 - stage: terraformapply
   jobs:
@@ -42,5 +42,5 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Basic/Lab2'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
         environmentServiceNameAzureRM: 'sc-pipeline'
