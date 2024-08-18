@@ -7,6 +7,10 @@ stages:
   jobs:
   - job: TerraformInit
     steps:
+    
+    - task: SonarQubeAnalyze@6
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
