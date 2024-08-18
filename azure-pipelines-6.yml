@@ -30,7 +30,7 @@ stages:
     - script: rm -rf .terraform
     - task: TerraformInstaller@1
       inputs:
-        terraformVersion: 'latest'
+        terraformVersion: '3.114.0'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
