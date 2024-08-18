@@ -24,6 +24,9 @@ stages:
   jobs:
   - job: TerraformValidate
     steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -33,6 +36,9 @@ stages:
   jobs:
   - job: TerraformPlan
     steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
