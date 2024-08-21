@@ -1,6 +1,7 @@
 trigger: none
 
-pool: Default
+pool: 
+  vmimage: "ubuntu-latest"
 
 stages:
 - stage: Terraforminit
