@@ -1,0 +1,73 @@
+trigger: none  # No automatic trigger; run manually or specify branches
+
+pool: 
+  vmImage: 'ubuntu-latest'  # Correct casing for 'vmImage'
+
+variables:
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
+  terraformVersion: 'latest'
+  backendServiceArm: 'connection_01'
+  resourceGroupName: 'rg-lab'
+  storageAccountName: 'duedatelab'
+  containerName: 'pipelinetfstate'
+  tfstateKey: 'terraform.tfstate'
+
+stages:
+- stage: TerraformInit
+  jobs:
+  - job: TerraformInit
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '$(terraformVersion)'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(workingDirectory)'
+        backendServiceArm: '$(backendServiceArm)'  # Azure service connection
+        backendAzureRmResourceGroupName: '$(resourceGroupName)'
+        backendAzureRmStorageAccountName: '$(storageAccountName)'
+        backendAzureRmContainerName: '$(containerName)'
+        backendAzureRmKey: '$(tfstateKey)'
+
+- stage: TerraformValidate
+  jobs:
+  - job: TerraformValidate
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '$(terraformVersion)'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(workingDirectory)'
+
+- stage: TerraformPlan
+  jobs:
+  - job: TerraformPlan
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '$(terraformVersion)'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(workingDirectory)'
+        backendServiceArm: '$(backendServiceArm)'  # Consistent service connection name
+
+- stage: TerraformApply
+  jobs:
+  - job: TerraformApply
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '$(terraformVersion)'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(workingDirectory)'
+        backendServiceArm: '$(backendServiceArm)'  # Consistent service connection name
