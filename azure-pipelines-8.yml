@@ -53,3 +53,15 @@ stages:
         backendAzureRmStorageAccountName: 'duedatelab'
         backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'pipeline.tfstate'
+  - job: TerraformApply
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
+        backendServiceArm: 'connection_01'
+        backendAzureRmResourceGroupName: 'rg-lab'
+        backendAzureRmStorageAccountName: 'duedatelab'
+        backendAzureRmContainerName: 'pipelinetfstate'
+        backendAzureRmKey: 'pipeline.tfstate'
