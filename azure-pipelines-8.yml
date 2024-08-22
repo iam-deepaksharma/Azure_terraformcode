@@ -20,6 +20,7 @@ jobs:
         backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'pipeline.tfstate'
   - job: Terraformvalidate
+    dependsOn: TerraformInit
     steps:
     - task: TerraformTaskV4@4
       inputs:
