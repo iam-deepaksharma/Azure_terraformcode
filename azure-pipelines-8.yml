@@ -19,6 +19,8 @@ jobs:
         backendAzureRmStorageAccountName: 'duedatelab'
         backendAzureRmContainerName: 'pipelinetfstate'
         backendAzureRmKey: 'pipeline.tfstate'
+  - job: Terraformvalidate
+    steps:
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
