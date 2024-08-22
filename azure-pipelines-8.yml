@@ -39,3 +39,17 @@ stages:
         provider: 'azurerm'
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
+- stage: TerraformPlan
+  jobs:
+  - job: TerraformPlan
+    steps:
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Networking/Lab2'
+        backendServiceArm: 'connection_01'
+        backendAzureRmResourceGroupName: 'rg-lab'
+        backendAzureRmStorageAccountName: 'duedatelab'
+        backendAzureRmContainerName: 'pipelinetfstate'
+        backendAzureRmKey: 'pipeline.tfstate'
