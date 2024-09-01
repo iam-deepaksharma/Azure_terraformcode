@@ -1,0 +1,7 @@
+trigger: none
+
+pool:
+  vmimage = ubuntu-latest
+
+stages:
+- stage: 
