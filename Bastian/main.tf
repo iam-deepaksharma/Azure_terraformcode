@@ -5,23 +5,53 @@ terraform {
       version = "3.116.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "rg-lab"                  # Can be passed via `-backend-config=`"resource_group_name=<resource group name>"` in the `init` command.
-    storage_account_name = "duedatelab"              # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
-    container_name       = "pipelinetfstate"         # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
-    key                  = "vmlab.terraform.tfstate" # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
-  }
 }
 
 provider "azurerm" {
   features {
-
+    key_vault {
+      purge_soft_delete_on_destroy = true
+      recover_soft_deleted_key_vaults = true
+    }
   }
 }
 
 resource "azurerm_resource_group" "blockrg" {
-  name     = "rg-vm"
+  name     = "rg-bastian"
   location = "southindia"
+}
+
+resource "azurerm_key_vault" "example" {
+  name                        = "bastian-keyvaultlab"
+  location                    = azurerm_resource_group.blockrg.location
+  resource_group_name         = azurerm_resource_group.blockrg.name
+  enabled_for_disk_encryption = true
+  tenant_id                   = data.azurerm_client_config.clientblock.tenant_id
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = false
+
+  sku_name = "standard"
+enable_rbac_authorization = true
+  access_policy {
+    tenant_id = data.azurerm_client_config.clientblock.tenant_id
+    object_id = data.azurerm_client_config.clientblock.object_id
+
+    secret_permissions = [
+      "Get", "List", "Set"
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "usernameblock" {
+  name         = "bastionusernamelab"
+  value        = "azureuser"
+  key_vault_id = azurerm_key_vault.example.id
+}
+
+resource "azurerm_key_vault_secret" "passwordblock" {
+  name         = "bastionpasswordlab"
+  value        = "Tulsaking@123"
+  key_vault_id = azurerm_key_vault.example.id
 }
 
 resource "azurerm_virtual_network" "block2" {
@@ -29,7 +59,7 @@ resource "azurerm_virtual_network" "block2" {
   name                = "vnet-vm"
   resource_group_name = azurerm_resource_group.blockrg.name
   location            = azurerm_resource_group.blockrg.location
-  address_space       = ["10.0.0.0/24"]
+  address_space       = ["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "block3" {
@@ -41,10 +71,11 @@ resource "azurerm_subnet" "block3" {
 }
 
 resource "azurerm_subnet" "bastiansubnetblock" {
-  name                 = "AzureBastianSubnet"
+    depends_on = [ azurerm_virtual_network.block2 ]
+  name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.blockrg.name
   virtual_network_name = azurerm_virtual_network.block2.name
-  address_prefixes     = ["10.0.2.0/26"]
+  address_prefixes     = ["10.0.1.64/26"]
 }
 
 resource "azurerm_public_ip" "block6" {
@@ -55,6 +86,7 @@ resource "azurerm_public_ip" "block6" {
 }
 
 resource "azurerm_network_interface" "block4" {
+    depends_on = [ azurerm_resource_group.blockrg ]
   name                = "nic-vm"
   resource_group_name = azurerm_resource_group.blockrg.name
   location            = azurerm_resource_group.blockrg.location
