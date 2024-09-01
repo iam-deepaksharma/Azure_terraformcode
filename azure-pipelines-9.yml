@@ -4,4 +4,16 @@ pool:
   vmimage = ubuntu-latest
 
 stages:
-- stage: 
+- stage: Environment test stage
+  jobs:
+  - deployment: dev
+    displayName: Dev
+    environment: frontend-dev
+    strategy:
+      runOnce:
+        steps: 
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'test'
+            targetPath: '$(Pipeline.Workspace)'
