@@ -61,3 +61,34 @@ resource "null_resource" "example" {
     command = "echo Hello, World!"
   }
 }
+
+
+resource "azurerm_resource_group" "rgblock" {
+  name     = "prod"
+  location = "centralindia"
+}
+
+resource "azurerm_storage_account" "storagelock" {
+  name                     = "storagestage"
+  resource_group_name      = azurerm_resource_group.rgblock.name
+  location                 = azurerm_resource_group.rgblock.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "containerblock" {
+  name                  = "prod"
+  storage_account       = azurerm_azure_storage_account.storageblock.name
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_table" "tableblock" {
+  name                = "prodtable"
+  storage_account_name = azurerm_storage_account.storageblock.name
+}
+
+resource "azurerm_storage_queue" "queueblock" {
+  name                 = "prodqueue"
+  storage_account_name = azurerm_storage_account.storageblock.name
+}
+resource "azurerm_storage "
