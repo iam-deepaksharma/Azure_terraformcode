@@ -20,11 +20,6 @@ stages:
     steps:
     - bash: echo "Hello India"
       displayName: "run hello india in stage2"
-
-- stage: Stage3
-  displayName: Stage3-print hello Bangalore
-  dependsOn: Stage2
-  jobs:
   - job: job3
     steps:
     - bash: echo "Hello Bangalore"
