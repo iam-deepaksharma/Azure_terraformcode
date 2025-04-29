@@ -1,0 +1,22 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Stage 1
+  displayName: Stage1-print hello world
+  jobs:
+  - job: job1
+    steps:
+    - script: echo "Hello World"
+      displayName: "run hello world in stage1"
+
+- stage: Stage2
+  displayName: Stage2-print hello india
+  jobs:
+  - job: job2
+    steps:
+    - script: echo "Hello India"
+      displayName: "run hello india in stage2"
