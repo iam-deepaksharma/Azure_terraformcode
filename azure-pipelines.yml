@@ -23,6 +23,7 @@ stages:
 
 - stage: Stage3
   displayName: Stage3-print hello Bangalore
+  dependsOn: Stage2
   jobs:
   - job: job3
     steps:
