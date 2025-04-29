@@ -20,3 +20,11 @@ stages:
     steps:
     - bash: echo "Hello India"
       displayName: "run hello india in stage2"
+
+- stage: Stage3
+  displayName: Stage3-print hello Bangalore
+  jobs:
+  - job: job3
+    steps:
+    - bash: echo "Hello Bangalore"
+      displayName: "run hello Bangalore in stage3"
