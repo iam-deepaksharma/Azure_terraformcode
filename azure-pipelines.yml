@@ -10,7 +10,7 @@ stages:
   jobs:
   - job: job1
     steps:
-    - script: echo "Hello World"
+    - bash: echo "Hello World"
       displayName: "run hello world in stage1"
 
 - stage: Stage2
@@ -18,5 +18,5 @@ stages:
   jobs:
   - job: job2
     steps:
-    - script: echo "Hello India"
+    - bash: echo "Hello India"
       displayName: "run hello india in stage2"
